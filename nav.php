@@ -20,7 +20,15 @@
                         <li><a href="index.php#contact"><span class="icon fa fa-envelope"></span> Contact</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                         <li><?php echo"<a href='#'><span class='icon fa fa-sign-in'></span> Login</a>" ?></li>
+                        <?php
+                        echo"<li class='dropdown'>";
+                            echo"<a href='#' class='dropdown-toggle' data-toggle='dropdown'>Sign-Up<b class='caret'></b></a>";
+                            echo "<ul role='menu' class='dropdown-menu'>";
+                                echo "<li><a href='#'><span class='icon fa fa-sign-in'></span> Log-In</a></li>";
+                                echo "<li><a href='registration.php'><span class='icon fa fa-sign-out'></span> Register</a></li>";
+                            echo "</ul>";
+                        echo"</li>";           
+                        ?>
                         <li><a href="#"><span class="icon fa fa-car"></span> Book Service</a></li>
                     </ul>
                 </div>  

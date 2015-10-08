@@ -1,6 +1,6 @@
 <?php 
     session_start();
-    $_SESSION['script']="<script type='text/javascript' src='form.js'></script>";
+    $_SESSION['script']="<script type='text/javascript' src='js/registration.js'></script>";
 ?>
 <!doctype html>
 <html class="no-js" lang="">
@@ -18,12 +18,21 @@
         <script src="js/vendor/modernizr-2.8.3.min.js"></script>
         <!-- Modernizr -->
 <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+<?php include 'script.php'; ?>
 <?php echo $_SESSION['script']; //added script for form validation ?> 
 <!-- Respond.js for IE 8 or less only -->
 <!--[if (lt IE 9) & (!IEMobile)]>
 <script src="js/vendor/respond.min.js"></script>
 <![endif]--> 
         <title>Registration</title>
+        <style type="text/css">
+            .errorspan{
+                color: red;
+            }
+            .errorclass{
+                 background-color: #cccccc;
+            }
+        </style>
     </head>
     <body data-spy="scroll" data-target="#nb" data-offset="90">
         <!--[if lt IE 8]>
@@ -31,10 +40,14 @@
         <![endif]-->
         <!-- Add your site or application content here -->
         <?php include("nav.php"); ?>
+        
+
+
+
+
+
+
         <main role="main">
-            
-           
-            
             <div class="container-fluid registration-page" id="register">
                 <div role="page-info" class="register-head">
                     <h1>Register</h1>
@@ -44,7 +57,7 @@
                      </p>
                 </div>
                 <div class="container">
-                    <form class="form-horizontal" role="form">
+                    <form class="form-horizontal" id="signup" role="form">
                         <div class="form-group" form-group-lg>
                             <label for="fname" class="col-sm-2 control-label">
                                 First Name :
@@ -53,7 +66,7 @@
                                 <input type="text" class="form-control" id="fname" name="fname" value="" placeholder="Enter First Name">
                             </div> 
                             <span class="col-sm-4 errorspan" id="fnameerror">
-                                dsffds
+                                
                             </span>   
                         </div>
                         <br>
@@ -66,7 +79,7 @@
                                 placeholder="Enter Last Name">
                             </div>
                             <span class="col-sm-4 errorspan" id="lnameerror">
-                                jhfsjhsk
+                                
                             </span>
                         </div>
                         <br>
@@ -79,7 +92,7 @@
                                 placeholder="Enter your email-id">
                             </div>
                             <span class=" col-sm-4 errorspan" id="emailerror">
-                                jhfsjhsk
+                                
                             </span>
                         </div>
                         <br>
@@ -92,7 +105,7 @@
                                 placeholder="Enter your Mobile Number">
                             </div>
                             <span class="col-sm-4 errorspan" id="mobileerror">
-                                jhfsjhsk
+                                
                             </span>
                         </div>
                         <br>
@@ -124,7 +137,7 @@
                             <div class="col-sm-4" >
                                 <input type="password"class="form-control"name="password1" id="password1" placeholder="Enter a password" >
                             </div>
-                            <span class="col-sm-4 errorspan" id="password1error">dfsffs</span>
+                            <span class="col-sm-4 errorspan" id="password1error"></span>
                         </div>
                         <div class="form-group" form-group-sm>
                             <label for="password2" class="col-sm-2 control-label">
@@ -133,13 +146,13 @@
                             <div class="col-sm-4" >
                                 <input type="password"class="form-control"name="password2" id="password2" placeholder="Re-enter password for verification" >
                             </div>
-                            <span class="col-sm-4 errorspan" id="password2error">dfsffs</span>
+                            <span class="col-sm-4 errorspan" id="password2error"></span>
                         </div>
                         <br>
                         <div class="form-group">
                             <div class="col-sm-offset-3 col-sm-4">
                                 
-                            <input type="submit" class="btn btn-primary col-sm-offset-2" value="Submit" id="submit" name="submit">
+                            <input type="submit" class="btn btn-primary col-sm-offset-2" value="submit" id="submit" name="submit">
                         
                             </div>
                         </div>
@@ -148,4 +161,4 @@
             </div>
         </main>
 
-        <?php include 'script.php'; ?>
+        
