@@ -1,0 +1,59 @@
+//
+// Thumbnails
+// --------------------------------------------------
+
+
+// Mixin and adjust the regular image class
+.thumbnail {
+  display: block;
+  padding: @thumbnail-padding;
+  margin-bottom: @line-height-computed;
+  line-height: @line-height-base;
+  background-color: @thumbnail-bg;
+  border: 3px solid @thumbnail-border;//edited
+  border-radius: @thumbnail-border-radius;
+  .transition(border .2s ease-in-out);
+  max-height:400px;//added
+  position:relative;//added
+
+  > img,a 
+    > img {
+    &:extend(.img-responsive);
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: @thumbnail-border-radius;//added
+    width:100%;//added
+  }
+     
+  
+  
+  // Add a hover state for linked versions only
+  a&:hover,
+  a&:focus,
+  a&.active
+  {
+    
+    border-color: @link-color;
+    background-color:@link-color;
+  }
+
+  // Image captions
+  .caption {
+    padding: @thumbnail-caption-padding;
+    color: @thumbnail-caption-color;
+    
+  }
+  
+}
+.btn-thumbnail{//added
+  position:absolute;
+  @media(min-width:@screen-sm-min) and (max-width:@screen-sm-max){
+    top:100%;
+    left:37%;
+  }
+  top:50%;
+  left:37%;
+  @media(max-width:@screen-sm-max){
+  .button-size(@padding-small-vertical; @padding-small-horizontal; @font-size-small; @line-height-small; @btn-border-radius-small);
+  }
+}

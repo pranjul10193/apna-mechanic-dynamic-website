@@ -1,0 +1,320 @@
+//
+// Carousel
+// --------------------------------------------------
+
+
+// Wrapper for the slide container and indicators
+.carousel {
+  position: relative;
+  padding-top:15px;//not shown becaz it hides behind fixed navbar
+  padding-bottom:15px;
+  background-color:@gray-lighter;
+}
+
+.carousel-inner {
+  position: relative;
+  overflow: hidden;
+  width: 100%;//added
+
+  > .item {
+    display: none;
+    position: relative;
+    
+    max-height:655px;//added
+    
+
+    .transition(.6s ease-in-out left);
+
+    // Account for jankitude on images
+    > img,
+    > a > img {
+      position:relative;
+      &:extend(.img-responsive);
+      line-height: 1;
+      min-width:100%;//added
+      
+      @media (min-width:@screen-md-min){//added
+        margin-top:-5px;
+
+      }
+      @media(min-width:@screen-lg-min){//added in case of fixed navbar,already some portion will be eaten by it ,so give small 
+      //amt of -ve margin.
+        margin-top:-10px; 
+      }
+    }
+
+    // WebKit CSS3 transforms for supported devices
+    @media all and (transform-3d), (-webkit-transform-3d) {
+      .transition-transform(~'0.6s ease-in-out');
+      .backface-visibility(~'hidden');
+      .perspective(1000px);
+
+      &.next,
+      &.active.right {
+        .translate3d(100%, 0, 0);
+        left: 0;
+      }
+      &.prev,
+      &.active.left {
+        .translate3d(-100%, 0, 0);
+        left: 0;
+      }
+      &.next.left,
+      &.prev.right,
+      &.active {
+        .translate3d(0, 0, 0);
+        left: 0;
+      }
+    }
+  }
+
+  > .active,
+  > .next,
+  > .prev {
+    display: block;
+  }
+
+  > .active {
+    left: 0;
+  }
+
+  > .next,
+  > .prev {
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+
+  > .next {
+    left: 100%;
+  }
+  > .prev {
+    left: -100%;
+  }
+  > .next.left,
+  > .prev.right {
+    left: 0;
+  }
+
+  > .active.left {
+    left: -100%;
+  }
+  > .active.right {
+    left: 100%;
+  }
+
+}
+
+// Left/right controls for nav
+// ---------------------------
+
+.carousel-control {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: @carousel-control-width;
+  .opacity(@carousel-control-opacity);
+  font-size: @carousel-control-font-size;
+  color: @carousel-control-color;
+  text-align: center;
+  text-shadow: @carousel-text-shadow;
+  // We can't have this transition here because WebKit cancels the carousel
+  // animation if you trip this while in the middle of another animation.
+
+  // Set gradients for backgrounds
+  &.left {
+    #gradient > .horizontal(@start-color: rgba(0,0,0,.5); @end-color: rgba(0,0,0,.0001));
+  }
+  &.right {
+    left: auto;
+    right: 0;
+    #gradient > .horizontal(@start-color: rgba(0,0,0,.0001); @end-color: rgba(0,0,0,.5));
+  }
+
+  // Hover/focus state
+  &:hover,
+  &:focus {
+    outline: 0;
+    color: @carousel-control-color;
+    text-decoration: none;
+    .opacity(.9);
+  }
+
+  // Toggles
+  .icon-prev,
+  .icon-next,
+  .glyphicon-chevron-left,
+  .glyphicon-chevron-right {
+    position: absolute;
+    top: 50%;
+    margin-top: -10px;
+    z-index: 5;
+    display: inline-block;
+  }
+  .icon-prev,
+  .glyphicon-chevron-left {
+    left: 50%;
+    margin-left: -10px;
+  }
+  .icon-next,
+  .glyphicon-chevron-right {
+    right: 50%;
+    margin-right: -10px;
+  }
+  .icon-prev,
+  .icon-next {
+    width:  20px;
+    height: 20px;
+    line-height: 1;
+    font-family: serif;
+  }
+
+
+  .icon-prev {
+    &:before {
+      content: '\2039';// SINGLE LEFT-POINTING ANGLE QUOTATION MARK (U+2039)
+    }
+  }
+  .icon-next {
+    &:before {
+      content: '\203a';// SINGLE RIGHT-POINTING ANGLE QUOTATION MARK (U+203A)
+    }
+  }
+}
+
+// Optional indicator pips
+//
+// Add an unordered list with the following class and add a list item for each
+// slide your carousel holds.
+
+.carousel-indicators {
+  position: absolute;
+  bottom: 0px;//edited
+  margin-bottom:0px;//added
+  padding-bottom:0px;//added
+  left: 50%;
+  z-index: 15;
+  width: 60%;
+  margin-left: -30%;
+  padding-left: 0;
+  list-style: none;
+  text-align: center;
+
+  li {
+    display: inline-block;
+    width:  10px;//edited
+    height: 10px;//edited
+   // margin: 1px;//edited
+    text-indent: -999px;
+    background-color:@carousel-indicator-bg;
+    //border: 1px solid @carousel-indicator-border-color;//edited
+    border-radius: 10px;
+    cursor: pointer;
+
+    // IE8-9 hack for event handling
+    //
+    // Internet Explorer 8-9 does not support clicks on elements without a set
+    // `background-color`. We cannot use `filter` since that's not viewed as a
+    // background color by the browser. Thus, a hack is needed.
+    // See https://developer.mozilla.org/en-US/docs/Web/Events/click#Internet_Explorer
+    //
+    // For IE8, we set solid black as it doesn't support `rgba()`. For IE9, we
+    // set alpha transparency for the best results possible.
+    //background-color: #000 \9; // IE8
+    //background-color: rgba(0,0,0,0); // IE9 //edited-as we supplied bg, bg active colors manually, no need of this hack
+  }
+  .active ,
+  :hover{
+   // margin: 0;//edited
+   // width:  12px;//edited-as we no longer want our indicators to grow in size
+   // height: 12px;//edited
+    background-color: @carousel-indicator-active-bg;
+  }
+}
+
+// Optional captions
+// -----------------------------
+// Hidden by default for smaller viewports
+@media (min-width:@screen-md-min) {//edited and added
+.carousel-caption {
+  position:absolute;
+  left: 15%;//edited
+  right: 15%;//edited
+  top:15%;//edited or you can add bottom property
+  z-index: 10;
+  padding-top: 10px;//edited
+  padding-bottom: 10px;//edited
+  color: @carousel-caption-color;
+  font-size:@font-size-large;//added
+  text-align: center;
+  text-shadow: @carousel-text-shadow;
+  & .btn {
+    .button-size(@padding-large-vertical; @padding-large-horizontal; @font-size-large; @line-height-large; @btn-border-radius-large);
+    margin-top:15px;//added
+    text-shadow: none; // No shadow for button elements in carousel-caption
+  }
+ }
+}
+
+@media(max-width:@screen-xs-max){//added
+  .carousel-caption{
+  display:none;}
+  }
+
+
+@media(max-width:@screen-sm-max){//added
+  .carousel-caption{
+    position:absolute;
+    font-size:@font-size-small;
+    padding-top:9px;
+    padding-bottom:5px;
+    top:5%;
+    text-align:center;
+    color:@carousel-caption-color;
+    z-index:10;
+    left:15%;
+    right:15%;
+    >.btn,.btn-primary{
+      .button-size(@padding-small-vertical; @padding-small-horizontal; @font-size-small; @line-height-small; @btn-border-radius-small);
+    }
+
+  }
+}
+
+// Scale up controls for tablets and up
+@media screen and (min-width: @screen-sm-min) {
+
+  // Scale up the controls a smidge
+  .carousel-control {
+    .glyphicon-chevron-left,
+    .glyphicon-chevron-right,
+    .icon-prev,
+    .icon-next {
+      width: 30px;
+      height: 30px;
+      margin-top: -15px;
+      font-size: 30px;
+    }
+    .glyphicon-chevron-left,
+    .icon-prev {
+      margin-left: -15px;
+    }
+    .glyphicon-chevron-right,
+    .icon-next {
+      margin-right: -15px;
+    }
+  }
+
+  // Show and left align the captions
+  .carousel-caption {
+    left: 20%;
+    right: 20%;
+    padding-bottom: 30px;
+  }
+
+  // Move up the indicators
+  //.carousel-indicators {
+    //bottom: 20px;
+  //}
+}
