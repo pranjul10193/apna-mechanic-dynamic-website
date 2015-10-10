@@ -43,7 +43,9 @@ $(document).ready(function() {
 			if($('#lname').val()=="") {
 				errorfields.push('lname');
 			}
-
+			if($('#gender').val()==""){
+				errorfields.push('gender');
+			}
 			var fname_ok=fnamelegal.exec($('#fname').val());
 			if(!fname_ok){
 				illegalfields.push('fname');	
@@ -142,6 +144,10 @@ $(document).ready(function() {
 						$("#emailerror").html("Email is required");
 				        $("#emailerror").css("visibility","visible");
 					}
+					if (errorfields[j]=="gender") {
+						$("#gendererror").html("Gender is required");
+				        $("#gendererror").css("visibility","visible");
+					}
 					if (errorfields[j]=="password1") {
 						$("#password1").addClass('errorclass');
 						$("#password1error").html("Password is required");
@@ -152,6 +158,7 @@ $(document).ready(function() {
 						$("#password2error").html("Password verification is required");
 				        $("#password2error").css("visibility","visible");
 					}
+					
 				}
 			}
 		}

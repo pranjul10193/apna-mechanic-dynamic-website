@@ -1,4 +1,5 @@
 <?php 
+	session_start();
 	define('CAPTCHA_SIZE', '6');
 	define('CAPTCHA_WIDTH', '100');
 	define('CAPTCHA_HEIGHT', '25');
@@ -7,7 +8,7 @@
 	for ( $i=0; $i < CAPTCHA_SIZE; $i++) { 
 		$pass_phrase.=chr(rand(91,122));
 	}
-	$_SESSION['pass_phrase']=sha1($pass_phrase);//store avalue in session variable to verify it whenever it is called
+	$_SESSION['pass_phrase']=sha1($pass_phrase);//store a value in session variable to verify it whenever it is called
 
 	$img=imagecreatetruecolor(CAPTCHA_WIDTH, CAPTCHA_HEIGHT);
 

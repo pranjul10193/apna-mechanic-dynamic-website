@@ -39,29 +39,28 @@
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
         <!-- Add your site or application content here -->
-        <?php include("nav.php");
+        <?php include("nav.php");?>
+        <?php
+        if ($_SERVER['REQUEST_METHOD']=="POST")
+        {
                 if (isset($_SESSION['error'])){
                     unset($_SESSION['error']);
                 }
                 if (isset($_SESSION['input'])) {
                     unset($_SESSION['input']);
                 }
-         ?>
-        <?php
-        if ($_SERVER['REQUEST_METHOD']=="POST")
-        {
             
             $_SESSION['script']="<!--<script type='text/javascript' src='js/registration.js'></script>-->";
     
             
-            $input=array("fname","lname","mobile","password1","password2","gender");
+            $input=array("fname","lname","mobile","email","password1","password2","gender");
             $_SESSION['input']=array();
             
             foreach ($input as $value) {
                 $_SESSION['input'][$value]=$_POST[$value];
             }
-            $_SESSION['input']['user_phrase']=sha1($_POST['verify']);
-            $required=array("fname","lname","mobile","gender");
+            $_SESSION['input']['user-phrase']=sha1($_POST['verify']);
+            $required=array("fname","lname","mobile","email","gender");
             $_SESSION['error']=array();
                 foreach ($required as $value) {
                     if (!isset($_SESSION['input'][$value]) || $_SESSION['input'][$value]=="") {
@@ -69,13 +68,13 @@
                     }
                     else {
                         
-                        if (($value=='fname') && (!preg_match('/(?:^[A-Z][a-z]+$)/g', $_SESSION['input'][$value]))){
+                        if (($value=='fname') && (!preg_match('/(?:^[A-Z][a-z]+$)/', $_SESSION['input'][$value]))){
                             $_SESSION['error'][$value."Err"]=$value." is invalid.";
                         }
-                        if (($value=='lname') && (!preg_match('/(?:^[A-Z][a-z]+$)/g', $_SESSION['input'][$value]))){
+                        if (($value=='lname') && (!preg_match('/(?:^[A-Z][a-z]+$)/', $_SESSION['input'][$value]))){
                             $_SESSION['error'][$value."Err"]=$value." is invalid.";
                         }
-                        if (($value=='mobile') && (!preg_match('/^[0-9]{10}$/g', $_SESSION['input'][$value]))){
+                        if (($value=='mobile') && (!preg_match('/^[0-9]{10}$/', $_SESSION['input'][$value]))){
                             $_SESSION['error'][$value."Err"]=$value." is not valid";
                         }
                         if (($value=="email") && (!preg_match('/^[a-z_][a-z0-9]+(?:[-._][a-z0-9]+)*@[a-z]+(?:[-._][a-z0-9]+)*\.[a-z]+$/', $_SESSION['input'][$value]))){
@@ -96,12 +95,17 @@
             if ($_SESSION['input']['password2']!=$_SESSION['input']['password1']) {
                 $_SESSION['error']['password2Err']="Password do not match";
             }
+            if ($_SESSION['input']['user-phrase']!=$_SESSION['pass_phrase']) {
+                $_SESSION['error']['verifyErr']="Enter the text exactly as shown";
+            }
 
             if(isset($_SESSION['error']) && count($_SESSION['error'])>0){
-            
+                $msg= "Errors!";
             }
             else{
-        
+                $msg="Thank you for registering!";
+                unset($_SESSION['input']);
+                unset($_SESSION['error']);
             }
         }    
         ?> 
@@ -116,13 +120,17 @@
                      </p>
                 </div>
                 <div class="container">
+                    <div class="feedback">
+                        <h2><?php echo @$msg; ?></h2>
+                    </div>
                     <form class="form-horizontal" id="signup" role="form" method="post" action="<?php echo(htmlspecialchars($_SERVER['PHP_SELF'])); ?>">
                         <div class="form-group" form-group-lg>
                             <label for="fname" class="col-sm-2 control-label">
                                 First Name :
                             </label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="fname" name="fname" value="" placeholder="Enter First Name">
+                                <input type="text" class="form-control" id="fname" name="fname" value="<?php echo(@$_SESSION['input']['fname']); ?>"
+                                 placeholder="Enter First Name">
                             </div> 
                             <span class="col-sm-4 errorspan" id="fnameerror">
                                 <?php echo(@$_SESSION['error']['fnameErr']); ?>
@@ -134,7 +142,7 @@
                                 Last Name :
                             </label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="lname" name="lname" value=""
+                                <input type="text" class="form-control" id="lname" name="lname" value="<?php echo(@$_SESSION['input']['lname']); ?>"
                                 placeholder="Enter Last Name">
                             </div>
                             <span class="col-sm-4 errorspan" id="lnameerror">
@@ -147,7 +155,7 @@
                                 Email-id :
                             </label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="email" name="email" value=""
+                                <input type="text" class="form-control" id="email" name="email" value="<?php echo(@$_SESSION['input']['email']); ?>" 
                                 placeholder="Enter your email-id">
                             </div>
                             <span class=" col-sm-4 errorspan" id="emailerror">
@@ -160,7 +168,7 @@
                                 Mobile :
                             </label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="mobile" name="mobile" value=""
+                                <input type="text" class="form-control" id="mobile" name="mobile" value="<?php echo(@$_SESSION['input']['mobile']); ?>"
                                 placeholder="Enter your Mobile Number">
                             </div>
                             <span class="col-sm-4 errorspan" id="mobileerror">
@@ -187,7 +195,7 @@
                                 </label>
                             </div>
                             <span class="col-sm-4 errorspan" id="gendererror">
-                                <?php echo(@$_SESSION['error']['genderErr']); ?>
+                                <p><?php echo(@$_SESSION['error']['genderErr']); ?></p>
                             </span>    
                         </div>
                         <br>
@@ -223,9 +231,10 @@
                             <input type="text" id="verify" class="form-control" name="verify" placeholder="Enter the text in the image">
                             </div>
                             <img src="captcha.php" alt="verification phrase" class="col-sm-2">
-                            <span class="col-sm-4 errorspan">
-                                
+                            <span class="col-sm-4 errorspan" id="verifyerror">
+                                <?php echo(@$_SESSION['error']['verifyErr']); ?>
                             </span>
+                                
                         </div>
                         <div class="form-group">
                             <div class="col-sm-offset-3 col-sm-4">
@@ -238,5 +247,3 @@
                 </div>
             </div>
         </main>
-
-        
