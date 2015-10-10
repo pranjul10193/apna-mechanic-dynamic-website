@@ -19,7 +19,7 @@
         <!-- Modernizr -->
 <script src="js/vendor/modernizr-2.6.2.min.js"></script>
 <?php include 'script.php'; ?>
-<?php echo $_SESSION['script']; //added script for form validation ?> 
+<?php echo $_SESSION['script']; ?>
 <!-- Respond.js for IE 8 or less only -->
 <!--[if (lt IE 9) & (!IEMobile)]>
 <script src="js/vendor/respond.min.js"></script>
@@ -127,7 +127,9 @@
                                     Female 
                                 </label>
                             </div>
-                            <span class="col-sm-4 errorspan" id="gendererror">gjhgj</span>    
+                            <span class="col-sm-4 errorspan" id="gendererror">
+                                
+                            </span>    
                         </div>
                         <br>
                         <div class="form-group" form-group-sm>
@@ -149,6 +151,15 @@
                             <span class="col-sm-4 errorspan" id="password2error"></span>
                         </div>
                         <br>
+                        <div class="form-group">
+                            <label for="verify" class="col-sm-2 control-label">
+                                Verification :
+                            </label>
+                            <div class="col-sm-8">
+                                <input type="text" id="verify" class="col-sm-5" name="verify" placeholder="Enter the text in the image">
+                                <img src="captcha.php" alt="verification phrase" class="col-sm-3">
+                            </div>
+                        </div>
                         <div class="form-group">
                             <div class="col-sm-offset-3 col-sm-4">
                                 
