@@ -39,13 +39,72 @@
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
         <!-- Add your site or application content here -->
-        <?php include("nav.php"); ?>
+        <?php include("nav.php");
+                if (isset($_SESSION['error'])){
+                    unset($_SESSION['error']);
+                }
+                if (isset($_SESSION['input'])) {
+                    unset($_SESSION['input']);
+                }
+         ?>
+        <?php
+        if ($_SERVER['REQUEST_METHOD']=="POST")
+        {
+            
+            $_SESSION['script']="<!--<script type='text/javascript' src='js/registration.js'></script>-->";
+    
+            
+            $input=array("fname","lname","mobile","password1","password2","gender");
+            $_SESSION['input']=array();
+            
+            foreach ($input as $value) {
+                $_SESSION['input'][$value]=$_POST[$value];
+            }
+            $_SESSION['input']['user_phrase']=sha1($_POST['verify']);
+            $required=array("fname","lname","mobile","gender");
+            $_SESSION['error']=array();
+                foreach ($required as $value) {
+                    if (!isset($_SESSION['input'][$value]) || $_SESSION['input'][$value]=="") {
+                        $_SESSION['error'][$value."Err"]=$value." is required";
+                    }
+                    else {
+                        
+                        if (($value=='fname') && (!preg_match('/(?:^[A-Z][a-z]+$)/g', $_SESSION['input'][$value]))){
+                            $_SESSION['error'][$value."Err"]=$value." is invalid.";
+                        }
+                        if (($value=='lname') && (!preg_match('/(?:^[A-Z][a-z]+$)/g', $_SESSION['input'][$value]))){
+                            $_SESSION['error'][$value."Err"]=$value." is invalid.";
+                        }
+                        if (($value=='mobile') && (!preg_match('/^[0-9]{10}$/g', $_SESSION['input'][$value]))){
+                            $_SESSION['error'][$value."Err"]=$value." is not valid";
+                        }
+                        if (($value=="email") && (!preg_match('/^[a-z_][a-z0-9]+(?:[-._][a-z0-9]+)*@[a-z]+(?:[-._][a-z0-9]+)*\.[a-z]+$/', $_SESSION['input'][$value]))){
+                            $_SESSION['error'][$value."Err"]=$value." is invalid";
+                        }
+                        
+                    }
+                }
+            if ($_SESSION['input']['password1']=="") {
+                $_SESSION['error']['password1Err']="Password is required";
+            }
+            if ($_SESSION['input']['password2']=="") {
+                $_SESSION['error']['password2Err']="Password verification is required";
+            }
+            if (!preg_match('/^[a-zA-Z0-9!@*+-\/%.$]{8,12}$/', $_SESSION['input']['password1'])) {
+                $_SESSION['error']["password1Err"]="Password is not valid";
+            }
+            if ($_SESSION['input']['password2']!=$_SESSION['input']['password1']) {
+                $_SESSION['error']['password2Err']="Password do not match";
+            }
+
+            if(isset($_SESSION['error']) && count($_SESSION['error'])>0){
+            
+            }
+            else{
         
-
-
-
-
-
+            }
+        }    
+        ?> 
 
         <main role="main">
             <div class="container-fluid registration-page" id="register">
@@ -57,7 +116,7 @@
                      </p>
                 </div>
                 <div class="container">
-                    <form class="form-horizontal" id="signup" role="form">
+                    <form class="form-horizontal" id="signup" role="form" method="post" action="<?php echo(htmlspecialchars($_SERVER['PHP_SELF'])); ?>">
                         <div class="form-group" form-group-lg>
                             <label for="fname" class="col-sm-2 control-label">
                                 First Name :
@@ -66,7 +125,7 @@
                                 <input type="text" class="form-control" id="fname" name="fname" value="" placeholder="Enter First Name">
                             </div> 
                             <span class="col-sm-4 errorspan" id="fnameerror">
-                                
+                                <?php echo(@$_SESSION['error']['fnameErr']); ?>
                             </span>   
                         </div>
                         <br>
@@ -79,7 +138,7 @@
                                 placeholder="Enter Last Name">
                             </div>
                             <span class="col-sm-4 errorspan" id="lnameerror">
-                                
+                                <?php echo(@$_SESSION['error']['lnameErr']); ?>
                             </span>
                         </div>
                         <br>
@@ -92,7 +151,7 @@
                                 placeholder="Enter your email-id">
                             </div>
                             <span class=" col-sm-4 errorspan" id="emailerror">
-                                
+                                <?php echo(@$_SESSION['error']['emailErr']); ?>
                             </span>
                         </div>
                         <br>
@@ -105,7 +164,7 @@
                                 placeholder="Enter your Mobile Number">
                             </div>
                             <span class="col-sm-4 errorspan" id="mobileerror">
-                                
+                                <?php echo(@$_SESSION['error']['mobileErr']); ?>
                             </span>
                         </div>
                         <br>
@@ -128,7 +187,7 @@
                                 </label>
                             </div>
                             <span class="col-sm-4 errorspan" id="gendererror">
-                                
+                                <?php echo(@$_SESSION['error']['genderErr']); ?>
                             </span>    
                         </div>
                         <br>
@@ -139,7 +198,9 @@
                             <div class="col-sm-4" >
                                 <input type="password"class="form-control"name="password1" id="password1" placeholder="Enter a password" >
                             </div>
-                            <span class="col-sm-4 errorspan" id="password1error"></span>
+                            <span class="col-sm-4 errorspan" id="password1error">
+                                <?php echo(@$_SESSION['error']['password1Err']) ?>
+                            </span>
                         </div>
                         <div class="form-group" form-group-sm>
                             <label for="password2" class="col-sm-2 control-label">
@@ -148,17 +209,23 @@
                             <div class="col-sm-4" >
                                 <input type="password"class="form-control"name="password2" id="password2" placeholder="Re-enter password for verification" >
                             </div>
-                            <span class="col-sm-4 errorspan" id="password2error"></span>
+                            <span class="col-sm-4 errorspan" id="password2error">
+                                <?php echo(@$_SESSION['error']['password2Err']); ?>
+                            </span>
                         </div>
                         <br>
                         <div class="form-group">
                             <label for="verify" class="col-sm-2 control-label">
                                 Verification :
                             </label>
-                            <div class="col-sm-8">
-                                <input type="text" id="verify" class="col-sm-5" name="verify" placeholder="Enter the text in the image">
-                                <img src="captcha.php" alt="verification phrase" class="col-sm-3">
+                            
+                            <div class="col-sm-4">
+                            <input type="text" id="verify" class="form-control" name="verify" placeholder="Enter the text in the image">
                             </div>
+                            <img src="captcha.php" alt="verification phrase" class="col-sm-2">
+                            <span class="col-sm-4 errorspan">
+                                
+                            </span>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-offset-3 col-sm-4">

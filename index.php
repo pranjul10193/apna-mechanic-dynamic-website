@@ -40,12 +40,12 @@
                 </div>
                 <div id="navbar-collapsed" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
-                        <li><a href="#home"><span class="glyphicon glyphicon-home"></span> Home</a></li>
-                        <li><a href="#portfolio"><span class="glyphicon glyphicon-lock"></span> Portfolio</a></li>
+                        <li><a href="index.php#home"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+                        <li><a href="index.php#portfolio"><span class="glyphicon glyphicon-lock"></span> Portfolio</a></li>
                         
-                        <li><a href="#team"><span class="icon fa fa-group"></span> Team</a></li>
-                        <li><a href="#customers"> <span class="icon fa fa-desktop"></span> Customers</a></li>
-                        <li><a href="#contact"><span class="icon fa fa-envelope"></span> Contact</a></li>
+                        <li><a href="index.php#team"><span class="icon fa fa-group"></span> Team</a></li>
+                        <li><a href="index.php#customers"> <span class="icon fa fa-desktop"></span> Customers</a></li>
+                        <li><a href="index.php#contact"><span class="icon fa fa-envelope"></span> Contact</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <?php
@@ -75,7 +75,7 @@
                         <img src="img/DSC02319.JPG" class="img-responsive" alt="friends">
                         <div class="carousel-caption">
                             <h1><strong>When nothing goes right, go Left .</strong></h1>
-                            <a href="#portfolio" class="btn btn-primary">View Portfolio</a>
+                            <a href="index.php#portfolio" class="btn btn-primary">View Portfolio</a>
                         </div>
                     </div>
                     <div class="item">
@@ -85,7 +85,7 @@
                         <img  src="img/DSC02225.JPG" class="img-responsive"  alt="loved-ones">
                         <div class="carousel-caption">
                             <h1><strong>Teamwork is the first attitude towards achieving bigger Goal .</strong></h1>
-                            <a href="#team" class="btn btn-primary">Meet the Team</a>
+                            <a href="index.php#team" class="btn btn-primary">Meet the Team</a>
                         </div>
                     </div>
                 </div>
