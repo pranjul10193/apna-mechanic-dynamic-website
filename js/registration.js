@@ -24,7 +24,7 @@ $(document).ready(function() {
 			var lnamelegal=/(?:^[A-Z][a-z]+$)/g;
 			var phonelegal=/^[0-9]{10}$/g;
 			var emaillegal=/^[a-z_][a-z0-9]+(?:[-._][a-z0-9]+)*@[a-z]+(?:[-._][a-z0-9]+)*\.[a-z]+$/g;
-			var passlegal=/^[a-zA-Z0-9!@*+-\/%.$]{8,12}$/g;
+			var passlegal=/^[a-zA-Z0-9!@*+-_.$]{8,12}$/g;
 			if($('#fname').val()==""){
 				errorfields.push('fname');
 			}
@@ -71,7 +71,7 @@ $(document).ready(function() {
 			if($('#password2').val()!=$('#password1').val()){
 				illegalfields.push('password2');
 			}
-			
+			 
 		    if(illegalfields!=""){
 		    	error.push("illegalfields");
 				
@@ -117,7 +117,7 @@ $(document).ready(function() {
 					}
 					if (illegalfields[j]=="password1") {
 						$("#password1").addClass('errorclass');
-						$("#password1error").html("Password entered is not valid");
+						$("#password1error").html("You can use alphabets,numbers and special characters(@,!,*,+,.,_,$) only");
 						$("#password1error").css("visibility","visible");
 					}
 				}

@@ -90,8 +90,8 @@
             if ($_SESSION['input']['password2']=="") {
                 $_SESSION['error']['password2Err']="Password verification is required";
             }
-            if (!preg_match('/^[a-zA-Z0-9!@*+-\/%.$]{8,12}$/', $_SESSION['input']['password1'])) {
-                $_SESSION['error']["password1Err"]="Password is not valid";
+            if (!preg_match('/^[a-zA-Z0-9!@*+-_.$]{8,12}$/', $_SESSION['input']['password1'])) {
+                $_SESSION['error']["password1Err"]="You can use alphabets,numbers and special characters(@,!,*,+,.,_,$) only";
             }
             if ($_SESSION['input']['password2']!=$_SESSION['input']['password1']) {
                 $_SESSION['error']['password2Err']="Password do not match";
@@ -161,7 +161,7 @@
                             </label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" id="fname" name="fname" value="<?php echo(@$_SESSION['input']['fname']); ?>"
-                                 placeholder="Enter First Name">
+                                 placeholder="Enter First Name(e.g. Radhika)">
                             </div> 
                             <span class="col-sm-4 errorspan" id="fnameerror">
                                 <?php echo(@$_SESSION['error']['fnameErr']); ?>
@@ -174,7 +174,7 @@
                             </label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" id="lname" name="lname" value="<?php echo(@$_SESSION['input']['lname']); ?>"
-                                placeholder="Enter Last Name">
+                                placeholder="Enter Last Name(e.g. Mishra)">
                             </div>
                             <span class="col-sm-4 errorspan" id="lnameerror">
                                 <?php echo(@$_SESSION['error']['lnameErr']); ?>
@@ -187,7 +187,7 @@
                             </label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" id="email" name="email" value="<?php echo(@$_SESSION['input']['email']); ?>" 
-                                placeholder="Enter your email-id">
+                                placeholder="Enter your valid email-id">
                             </div>
                             <span class=" col-sm-4 errorspan" id="emailerror">
                                 <?php echo(@$_SESSION['error']['emailErr']); ?>
@@ -200,7 +200,7 @@
                             </label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" id="mobile" name="mobile" value="<?php echo(@$_SESSION['input']['mobile']); ?>"
-                                placeholder="Enter your Mobile Number">
+                                placeholder="Enter your Mobile Number(10 digits)">
                             </div>
                             <span class="col-sm-4 errorspan" id="mobileerror">
                                 <?php echo(@$_SESSION['error']['mobileErr']); ?>
@@ -235,10 +235,10 @@
                                 Password :
                             </label>
                             <div class="col-sm-4" >
-                                <input type="password"class="form-control"name="password1" id="password1" placeholder="Enter a password" >
+                                <input type="password"class="form-control"name="password1" id="password1" placeholder="Enter a password (8-12 characters)" >
                             </div>
                             <span class="col-sm-4 errorspan" id="password1error">
-                                <?php echo(@$_SESSION['error']['password1Err']) ?>
+                                <?php echo(@$_SESSION['error']['password1Err']); ?>
                             </span>
                         </div>
                         <div class="form-group" form-group-sm>
