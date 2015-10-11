@@ -104,27 +104,38 @@
                 $msg= "Errors!";
             }
             else{
+                
                 $fname=$_SESSION['input']['fname'];
                 $lname=$_SESSION['input']['lname'];
                 $mobile=$_SESSION['input']['mobile'];
                 $email=$_SESSION['input']['email'];
                 $password=$_SESSION['input']['password1'];
                 $gender=$_SESSION['input']['gender'];
-                $query="INSERT INTO customer (cust_id, fname, lname, email, password, mobile, gender, regdate) VALUES ('', '$fname', '$lname', '$email', sha1('$password'), '$mobile', '$gender', NOW() )";
-                $result= @mysqli_query($db,$query);
-                if ($result) {
-
-                    $msg="Thank you for registering!";
+                $query="SELECT * FROM customer WHERE (mobile='$mobile')";
+                $result=@mysqli_query($db,$query);
+                if (@mysqli_num_rows($result)==1) {
+                    $msg="You have already registered..!";
+                    @mysqli_free_result($result);
                     unset($_SESSION['input']);
                     unset($_SESSION['error']);
                 }
                 else{
-                    $msg="You couldnt connect due to system error. We apologise !";
-                    $error=mysqli_error($db);
+                    $query="INSERT INTO customer (cust_id, fname, lname, email, password, mobile, gender, regdate) VALUES ('', '$fname', '$lname', '$email', sha1('$password'), '$mobile', '$gender', NOW() )";
+                    $result= @mysqli_query($db,$query);
+                    if ($result) {
+
+                        $msg="Thank you for registering!";
+                        unset($_SESSION['input']);
+                        unset($_SESSION['error']);
+                    }
+                    else{
+                        $msg="You couldnt connect due to system error. We apologise !";
+                        $error=mysqli_error($db);
+                    }
                 }
-                mysqli_close($db); 
-            }
-        }    
+            }    
+            mysqli_close($db);
+        }        
         ?> 
 
         <main role="main">
@@ -140,7 +151,8 @@
                     <div class="feedback">
                         <h2><?php echo @$msg; 
                                     echo @$error;
-                            ?></h2>
+                            ?>
+                        </h2>
                     </div>
                     <form class="form-horizontal" id="signup" role="form" method="post" action="<?php echo(htmlspecialchars($_SERVER['PHP_SELF'])); ?>">
                         <div class="form-group" form-group-lg>
