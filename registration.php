@@ -41,6 +41,7 @@
         <!-- Add your site or application content here -->
         <?php include("nav.php");?>
         <?php
+        require 'mysqli_connect.php';
         if ($_SERVER['REQUEST_METHOD']=="POST")
         {
                 if (isset($_SESSION['error'])){
@@ -103,9 +104,25 @@
                 $msg= "Errors!";
             }
             else{
-                $msg="Thank you for registering!";
-                unset($_SESSION['input']);
-                unset($_SESSION['error']);
+                $fname=$_SESSION['input']['fname'];
+                $lname=$_SESSION['input']['lname'];
+                $mobile=$_SESSION['input']['mobile'];
+                $email=$_SESSION['input']['email'];
+                $password=$_SESSION['input']['password1'];
+                $gender=$_SESSION['input']['gender'];
+                $query="INSERT INTO customer (cust_id, fname, lname, email, password, mobile, gender, regdate) VALUES ('', '$fname', '$lname', '$email', sha1('$password'), '$mobile', '$gender', NOW() )";
+                $result= @mysqli_query($db,$query);
+                if ($result) {
+
+                    $msg="Thank you for registering!";
+                    unset($_SESSION['input']);
+                    unset($_SESSION['error']);
+                }
+                else{
+                    $msg="You couldnt connect due to system error. We apologise !";
+                    $error=mysqli_error($db);
+                }
+                mysqli_close($db); 
             }
         }    
         ?> 
@@ -121,7 +138,9 @@
                 </div>
                 <div class="container">
                     <div class="feedback">
-                        <h2><?php echo @$msg; ?></h2>
+                        <h2><?php echo @$msg; 
+                                    echo @$error;
+                            ?></h2>
                     </div>
                     <form class="form-horizontal" id="signup" role="form" method="post" action="<?php echo(htmlspecialchars($_SERVER['PHP_SELF'])); ?>">
                         <div class="form-group" form-group-lg>
