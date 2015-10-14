@@ -21,11 +21,25 @@
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <?php
+                        if (@$_SESSION['log']=="yes"){
+                            $sign_value=" Sign-Out";
+                            $log_value=" Log-Out";
+                            $other=" Edit Details";
+                            $menu1="logout.php";
+                            $menu2="editDetail.php";
+                        }
+                        else{
+                            $sign_value=" Sign-In";
+                            $log_value=" Log-In";
+                            $other=" Register";
+                            $menu1="login.php";
+                            $menu2="registration.php";
+                        }
                         echo"<li class='dropdown'>";
-                            echo"<a href='#' class='dropdown-toggle' data-toggle='dropdown'>Sign-Up<b class='caret'></b></a>";
+                            echo"<a href='#' class='dropdown-toggle' data-toggle='dropdown'>".$sign_value."<b class='caret'></b></a>";
                             echo "<ul role='menu' class='dropdown-menu'>";
-                                echo "<li><a href='#'><span class='icon fa fa-sign-in'></span> Log-In</a></li>";
-                                echo "<li><a href='registration.php'><span class='icon fa fa-sign-out'></span> Register</a></li>";
+                                echo "<li><a href='$menu1'><span class='icon fa fa-sign-in'></span>".$log_value."</a></li>";
+                                echo "<li><a href='$menu2'><span class='icon fa fa-sign-out'></span>".$other."</a></li>";
                             echo "</ul>";
                         echo"</li>";           
                         ?>

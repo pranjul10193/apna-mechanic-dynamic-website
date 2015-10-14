@@ -1,6 +1,6 @@
 <?php 
     session_start();
-    $_SESSION['script']="<script type='text/javascript' src='js/registration.js'></script>";
+    $script="<script type='text/javascript' src='js/registration.js'></script>";
 ?>
 <!doctype html>
 <html class="no-js" lang="">
@@ -19,7 +19,7 @@
         <!-- Modernizr -->
 <script src="js/vendor/modernizr-2.6.2.min.js"></script>
 <?php include 'script.php'; ?>
-<?php echo $_SESSION['script']; ?>
+<?php echo $script; ?>
 <!-- Respond.js for IE 8 or less only -->
 <!--[if (lt IE 9) & (!IEMobile)]>
 <script src="js/vendor/respond.min.js"></script>
@@ -51,7 +51,7 @@
                     unset($_SESSION['input']);
                 }
             
-            $_SESSION['script']="<!--<script type='text/javascript' src='js/registration.js'></script>-->";
+            //$script="<!--<script type='text/javascript' src='js/registration.js'></script>-->";
     
             
             $input=array("fname","lname","mobile","email","password1","password2","gender");
@@ -81,7 +81,7 @@
                         if (($value=="email") && (!preg_match('/^[a-z_][a-z0-9]+(?:[-._][a-z0-9]+)*@[a-z]+(?:[-._][a-z0-9]+)*\.[a-z]+$/', $_SESSION['input'][$value]))){
                             $_SESSION['error'][$value."Err"]=$value." is invalid";
                         }
-                        
+                         
                     }
                 }
             if ($_SESSION['input']['password1']=="") {
@@ -111,7 +111,8 @@
                 $email=$_SESSION['input']['email'];
                 $password=$_SESSION['input']['password1'];
                 $gender=$_SESSION['input']['gender'];
-                $query="SELECT * FROM customer WHERE (mobile='$mobile')";
+                
+                $query="SELECT * FROM customer WHERE (mobile='$mobile' OR email='$email')";
                 $result=@mysqli_query($db,$query);
                 if (@mysqli_num_rows($result)==1) {
                     $msg="You have already registered..!";
@@ -156,7 +157,7 @@
                     </div>
                     <form class="form-horizontal" id="signup" role="form" method="post" action="<?php echo(htmlspecialchars($_SERVER['PHP_SELF'])); ?>">
                         <div class="form-group" form-group-lg>
-                            <label for="fname" class="col-sm-2 control-label">
+                            <label for="fname" class="col-sm-offset-2 col-sm-2 control-label">
                                 First Name :
                             </label>
                             <div class="col-sm-4">
@@ -169,7 +170,7 @@
                         </div>
                         <br>
                         <div class="form-group" form-group-sm>
-                            <label for="lname" class="col-sm-2 control-label">
+                            <label for="lname" class="col-sm-2 col-sm-offset-2 control-label">
                                 Last Name :
                             </label>
                             <div class="col-sm-4">
@@ -182,7 +183,7 @@
                         </div>
                         <br>
                         <div class="form-group" form-group-sm>
-                            <label for="email" class="col-sm-2 control-label">
+                            <label for="email" class="col-sm-2 col-sm-offset-2 control-label">
                                 Email-id :
                             </label>
                             <div class="col-sm-4">
@@ -195,7 +196,7 @@
                         </div>
                         <br>
                         <div class="form-group" form-group-sm>
-                            <label for="mobile" class="col-sm-2 control-label">
+                            <label for="mobile" class="col-sm-2 col-sm-offset-2 control-label">
                                 Mobile :
                             </label>
                             <div class="col-sm-4">
@@ -208,7 +209,7 @@
                         </div>
                         <br>
                         <div class="form-group " form-group-sm>
-                            <label for="gender" class="col-sm-2 control-label ">
+                            <label for="gender" class="col-sm-2 col-sm-offset-2 control-label ">
                                 Gender :
                             </label>
                             <div class="col-sm-4">
@@ -231,7 +232,7 @@
                         </div>
                         <br>
                         <div class="form-group" form-group-sm>
-                            <label for="password1" class="col-sm-2 control-label">
+                            <label for="password1" class="col-sm-2 col-sm-offset-2 control-label">
                                 Password :
                             </label>
                             <div class="col-sm-4" >
@@ -242,7 +243,7 @@
                             </span>
                         </div>
                         <div class="form-group" form-group-sm>
-                            <label for="password2" class="col-sm-2 control-label">
+                            <label for="password2" class="col-sm-2 col-sm-offset-2 control-label">
                                 Re-enter Password :
                             </label>
                             <div class="col-sm-4" >
@@ -254,7 +255,7 @@
                         </div>
                         <br>
                         <div class="form-group">
-                            <label for="verify" class="col-sm-2 control-label">
+                            <label for="verify" class="col-sm-2 col-sm-offset-2 control-label">
                                 Verification :
                             </label>
                             
@@ -262,13 +263,13 @@
                             <input type="text" id="verify" class="form-control" name="verify" placeholder="Enter the text in the image">
                             </div>
                             <img src="captcha.php" alt="verification phrase" class="col-sm-2">
-                            <span class="col-sm-4 errorspan" id="verifyerror">
+                            <span class="col-sm-2 errorspan" id="verifyerror">
                                 <?php echo(@$_SESSION['error']['verifyErr']); ?>
                             </span>
                                 
                         </div>
                         <div class="form-group">
-                            <div class="col-sm-offset-3 col-sm-4">
+                            <div class="col-sm-offset-5 col-sm-4">
                                 
                             <input type="submit" class="btn btn-primary col-sm-offset-2" value="submit" id="submit" name="submit">
                         
@@ -278,3 +279,5 @@
                 </div>
             </div>
         </main>
+    </body>
+</html>        
