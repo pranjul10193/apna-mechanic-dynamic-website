@@ -129,10 +129,10 @@
                                 Email-id :
                             </label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="log-email" name="email" value="<?php echo(@$_SESSION['login']['email']); ?>" 
+                                <input type="text" class="form-control" id="email" name="email" value="<?php echo(@$_SESSION['login']['email']); ?>" 
                                 placeholder="Enter your registered email-id">
                             </div>
-                            <span class=" col-sm-4 errorspan" id="log-emailerror">
+                            <span class=" col-sm-4 errorspan" id="emailerror">
                                 <?php echo(@$error['email']); ?>
                             </span>
                         </div>
@@ -142,9 +142,9 @@
                                 Password :
                             </label>
                             <div class="col-sm-4" >
-                                <input type="password"class="form-control" name="password1" id="log-password1" placeholder="Enter your password" >
+                                <input type="password"class="form-control" name="password1" id="password1" placeholder="Enter your password" >
                             </div>
-                            <span class="col-sm-4 errorspan" id="log-password1error">
+                            <span class="col-sm-4 errorspan" id="password1error">
                                 <?php echo(@$error['password1']); ?>
                             </span>
                         </div>

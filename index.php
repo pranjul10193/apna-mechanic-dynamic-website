@@ -71,7 +71,7 @@
                             echo "</ul>";
                         echo"</li>";           
                         ?>
-                        <li><a href="#"><span class="icon fa fa-car"></span> Book Service</a></li>
+                        <li><a href="booking.php"><span class="icon fa fa-car"></span> Book Service</a></li>
                     </ul>
                 </div>  
             </div>  
