@@ -4,7 +4,6 @@
         header("Location: index.php");
         exit();
     }
-    $script="<script type='text/javascript' src='js/registration.js'></script>";
 ?>
 <!doctype html>
 <html class="no-js" lang="">
@@ -29,13 +28,12 @@
         <link rel="stylesheet" href="css/__main.css">
         <script src="js/vendor/modernizr-2.8.3.min.js"></script>
         <!-- Modernizr -->
-<script src="js/vendor/modernizr-2.6.2.min.js"></script>
-<?php include 'script.php'; ?>
-<!-- Respond.js for IE 8 or less only -->
-<!--[if (lt IE 9) & (!IEMobile)]>
-<script src="js/vendor/respond.min.js"></script>
-<![endif]--> 
-<title>Login</title>
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+        <?php include 'script.php'; ?>
+        <!-- Respond.js for IE 8 or less only -->
+        <!--[if (lt IE 9) & (!IEMobile)]>
+        <script src="js/vendor/respond.min.js"></script>
+        <![endif]--> 
     </head>
     <body data-spy="scroll" data-target="#nb" data-offset="90">
         <!--[if lt IE 8]>

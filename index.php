@@ -4,7 +4,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title></title>
+        <title>Apna Mechanic</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -19,7 +19,6 @@
 <!--[if (lt IE 9) & (!IEMobile)]>
 <script src="js/vendor/respond.min.js"></script>
 <![endif]--> 
-        <title>Apna Mechanic</title>
     </head>
     <body data-spy="scroll" data-target="#nb" data-offset="90">
         <!--[if lt IE 8]>
@@ -118,7 +117,7 @@
                 <div class="home-page">
                     <h1>Welcome 
                     <?php if (isset($_SESSION['fname'])) {
-                                echo(@$_SESSION['fname']);
+                                echo(@$_SESSION['fname'])."\n";
                                 echo "!";
                             }
                       ?>
