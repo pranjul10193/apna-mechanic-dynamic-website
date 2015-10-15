@@ -119,6 +119,7 @@
                     <h1>Welcome 
                     <?php if (isset($_SESSION['fname'])) {
                                 echo(@$_SESSION['fname']);
+                                echo "!";
                             }
                       ?>
                     </h1>

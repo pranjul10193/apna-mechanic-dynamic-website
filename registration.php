@@ -1,5 +1,9 @@
 <?php 
     session_start();
+    if ($_SESSION['log']=="yes") {
+        header("Location: index.php");
+        exit();
+    }
     $script="<script type='text/javascript' src='js/registration.js'></script>";
 ?>
 <!doctype html>
@@ -44,9 +48,6 @@
         require 'mysqli_connect.php';
         if ($_SERVER['REQUEST_METHOD']=="POST")
         {
-                if (isset($_SESSION['error'])){
-                    unset($_SESSION['error']);
-                }
                 if (isset($_SESSION['input'])) {
                     unset($_SESSION['input']);
                 }
@@ -62,45 +63,45 @@
             }
             $_SESSION['input']['user-phrase']=sha1($_POST['verify']);
             $required=array("fname","lname","mobile","email","gender");
-            $_SESSION['error']=array();
+            $error=array();
                 foreach ($required as $value) {
                     if (!isset($_SESSION['input'][$value]) || $_SESSION['input'][$value]=="") {
-                        $_SESSION['error'][$value."Err"]=$value." is required";
+                        $error[$value."Err"]=$value." is required";
                     }
                     else {
                         
                         if (($value=='fname') && (!preg_match('/(?:^[A-Z][a-z]+$)/', $_SESSION['input'][$value]))){
-                            $_SESSION['error'][$value."Err"]=$value." is invalid.";
+                            $error[$value."Err"]=$value." is invalid.";
                         }
                         if (($value=='lname') && (!preg_match('/(?:^[A-Z][a-z]+$)/', $_SESSION['input'][$value]))){
-                            $_SESSION['error'][$value."Err"]=$value." is invalid.";
+                            $error[$value."Err"]=$value." is invalid.";
                         }
                         if (($value=='mobile') && (!preg_match('/^[0-9]{10}$/', $_SESSION['input'][$value]))){
-                            $_SESSION['error'][$value."Err"]=$value." is not valid";
+                            $error[$value."Err"]=$value." is not valid";
                         }
                         if (($value=="email") && (!preg_match('/^[a-z_][a-z0-9]+(?:[-._][a-z0-9]+)*@[a-z]+(?:[-._][a-z0-9]+)*\.[a-z]+$/', $_SESSION['input'][$value]))){
-                            $_SESSION['error'][$value."Err"]=$value." is invalid";
+                            $error[$value."Err"]=$value." is invalid";
                         }
                          
                     }
                 }
             if ($_SESSION['input']['password1']=="") {
-                $_SESSION['error']['password1Err']="Password is required";
+                $error['password1Err']="Password is required";
             }
             if ($_SESSION['input']['password2']=="") {
-                $_SESSION['error']['password2Err']="Password verification is required";
+                $error['password2Err']="Password verification is required";
             }
             if (!preg_match('/^[a-zA-Z0-9!@*+-_.$]{8,12}$/', $_SESSION['input']['password1'])) {
-                $_SESSION['error']["password1Err"]="You can use alphabets,numbers and special characters(@,!,*,+,.,_,$) only";
+                $error["password1Err"]="You can use alphabets,numbers and special characters(@,!,*,+,.,_,$) only";
             }
             if ($_SESSION['input']['password2']!=$_SESSION['input']['password1']) {
-                $_SESSION['error']['password2Err']="Password do not match";
+                $error['password2Err']="Password do not match";
             }
             if ($_SESSION['input']['user-phrase']!=$_SESSION['pass_phrase']) {
-                $_SESSION['error']['verifyErr']="Enter the text exactly as shown";
+                $error['verifyErr']="Enter the text exactly as shown";
             }
 
-            if(isset($_SESSION['error']) && count($_SESSION['error'])>0){
+            if(isset($error) && count($error)>0){
                 $msg= "Errors!";
             }
             else{
@@ -118,7 +119,6 @@
                     $msg="You have already registered..!";
                     @mysqli_free_result($result);
                     unset($_SESSION['input']);
-                    unset($_SESSION['error']);
                 }
                 else{
                     $query="INSERT INTO customer (cust_id, fname, lname, email, password, mobile, gender, regdate) VALUES ('', '$fname', '$lname', '$email', sha1('$password'), '$mobile', '$gender', NOW() )";
@@ -127,11 +127,10 @@
 
                         $msg="Thank you for registering!";
                         unset($_SESSION['input']);
-                        unset($_SESSION['error']);
                     }
                     else{
                         $msg="You couldnt connect due to system error. We apologise !";
-                        $error=mysqli_error($db);
+                        $errordb=mysqli_error($db);
                     }
                 }
             }    
@@ -151,7 +150,7 @@
                 <div class="container">
                     <div class="feedback">
                         <h2><?php echo @$msg; 
-                                    echo @$error;
+                                    echo @$errordb;
                             ?>
                         </h2>
                     </div>
@@ -165,7 +164,7 @@
                                  placeholder="Enter First Name(e.g. Radhika)">
                             </div> 
                             <span class="col-sm-4 errorspan" id="fnameerror">
-                                <?php echo(@$_SESSION['error']['fnameErr']); ?>
+                                <?php echo(@$error['fnameErr']); ?>
                             </span>   
                         </div>
                         <br>
@@ -178,7 +177,7 @@
                                 placeholder="Enter Last Name(e.g. Mishra)">
                             </div>
                             <span class="col-sm-4 errorspan" id="lnameerror">
-                                <?php echo(@$_SESSION['error']['lnameErr']); ?>
+                                <?php echo(@$error['lnameErr']); ?>
                             </span>
                         </div>
                         <br>
@@ -191,7 +190,7 @@
                                 placeholder="Enter your valid email-id">
                             </div>
                             <span class=" col-sm-4 errorspan" id="emailerror">
-                                <?php echo(@$_SESSION['error']['emailErr']); ?>
+                                <?php echo(@$error['emailErr']); ?>
                             </span>
                         </div>
                         <br>
@@ -204,7 +203,7 @@
                                 placeholder="Enter your Mobile Number(10 digits)">
                             </div>
                             <span class="col-sm-4 errorspan" id="mobileerror">
-                                <?php echo(@$_SESSION['error']['mobileErr']); ?>
+                                <?php echo(@$error['mobileErr']); ?>
                             </span>
                         </div>
                         <br>
@@ -227,7 +226,7 @@
                                 </label>
                             </div>
                             <span class="col-sm-4 errorspan" id="gendererror">
-                                <p><?php echo(@$_SESSION['error']['genderErr']); ?></p>
+                                <p><?php echo(@$error['genderErr']); ?></p>
                             </span>    
                         </div>
                         <br>
@@ -239,7 +238,7 @@
                                 <input type="password"class="form-control"name="password1" id="password1" placeholder="Enter a password (8-12 characters)" >
                             </div>
                             <span class="col-sm-4 errorspan" id="password1error">
-                                <?php echo(@$_SESSION['error']['password1Err']); ?>
+                                <?php echo(@$error['password1Err']); ?>
                             </span>
                         </div>
                         <div class="form-group" form-group-sm>
@@ -250,7 +249,7 @@
                                 <input type="password"class="form-control"name="password2" id="password2" placeholder="Re-enter password for verification" >
                             </div>
                             <span class="col-sm-4 errorspan" id="password2error">
-                                <?php echo(@$_SESSION['error']['password2Err']); ?>
+                                <?php echo(@$error['password2Err']); ?>
                             </span>
                         </div>
                         <br>
@@ -264,7 +263,7 @@
                             </div>
                             <img src="captcha.php" alt="verification phrase" class="col-sm-2">
                             <span class="col-sm-2 errorspan" id="verifyerror">
-                                <?php echo(@$_SESSION['error']['verifyErr']); ?>
+                                <?php echo(@$error['verifyErr']); ?>
                             </span>
                                 
                         </div>

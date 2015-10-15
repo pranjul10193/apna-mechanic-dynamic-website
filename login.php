@@ -11,7 +11,15 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title></title>
+        <title>Log-In</title>
+        <style type="text/css">
+            .errorspan{
+                color: red;
+            }
+            .errorclass{
+                 background-color: #cccccc;
+            }
+        </style>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -93,6 +101,7 @@
                 else{
                     $msg="You could not login due to system error.Please try again later.";
                     $errordb=mysqli_error($db);
+                    unset($_SESSION['login']);
                 }
             }
             mysqli_close($db);
