@@ -116,8 +116,8 @@
             <div class="page-content container-fluid" id="home">
                 <div class="home-page">
                     <h1>Welcome 
-                    <?php if (isset($_SESSION['fname'])) {
-                                echo(@$_SESSION['fname'])."\n";
+                    <?php if (isset($_SESSION['index']['fname'])) {
+                                echo(@$_SESSION['index']['fname'])."\n";
                                 echo "!";
                             }
                       ?>

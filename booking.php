@@ -4,7 +4,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Book a Servicing</title>
+        <title>Book a Service</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -39,15 +39,135 @@
         require 'mysqli_connect.php';
 
         if ($_SERVER['REQUEST_METHOD']=="POST") {
-        	
-            if (!isset($_SESSION['verify_member'])) {
-                	
-                if (isset($_SESSION['book'])) {
-                    unset($_SESSION['book']);
-                }   
-            	$_SESSION['book']['mobile']=$_POST['mobile'];
+    
+
+        	if (isset($_SESSION['verify_member']) && ($_SESSION['identity']=="guest")) {
+        		if(isset($_SESSION['book'])){
+        			unset($_SESSION['book']);
+        		}
+            	$attr="";
+            	$some="";
+            	$input=array("fname","email","mobile","vehicle","description");
             	$error=array();
-            	$msg="First enter your mobile number and click submit";
+            	foreach ($input as $value) {
+            		$_SESSION['book'][$value]=$_POST[$value];
+            	}
+            	$_SESSION['book']['user-phrase']=sha1($_POST['verify']);
+            	if ($_SESSION['book']['fname']=="") {
+            		$error['fnameErr']="Name required";
+            	}
+            	if ($_SESSION['book']['email']=="") {
+            		$error['emailErr']="Email required";
+            	}
+            	if ($_SESSION['book']['vehicle']=="") {
+            		$error['vehicleErr']="Please select a vehicle type.";
+            	}
+            	if ($_SESSION['book']['mobile']=="") {
+            		$error['mobileErr']="Please enter a mobile number";
+            	}
+
+            	if ($_SESSION['book']['user-phrase']!=$_SESSION['pass_phrase']) {
+            		$error['verifyErr']="Please enter the text exactly as shown";
+            	}
+            	if(!preg_match('/^[a-z_][a-z0-9]+(?:[-._][a-z0-9]+)*@[a-z]+(?:[-._][a-z0-9]+)*\.[a-z]+$/', $_SESSION['book']['email'])){
+                    $error['emailErr']="Email is invalid.Please enter a valid email";
+                }
+                if (!preg_match('/(?:^[A-Z][a-z]+$)/', $_SESSION['book']['fname'])) {
+                 	$error['fnameErr']="Name is not valid. Please enter a valid name.";
+                 }
+                if (!preg_match('/^[a-zA-Z0-9!@*+-_.$]+$/', $_SESSION['book']['description'])){
+                	$error['descriptionErr']="Please enter a genuine query!";
+                }
+                if (!preg_match('/^[0-9]{10}$/', $_SESSION['book']['mobile'])) {
+                	$error['mobileErr']="Please enter a valid mobile number";
+                }
+                if (count($error)>0) {
+                  	$msg="Errors!";
+                  }
+                else{
+                	$fname=$_SESSION['book']['fname'];
+                	$email=$_SESSION['book']['email'];
+                	$mobile=$_SESSION['book']['mobile']; 
+                	$vehicle=$_SESSION['book']['vehicle'];
+
+                	$description=$_SESSION['book']['description'];
+                	$query="INSERT INTO bookings (book_id, fname, email, mobile, vehicle, description, registered, regdate) VALUES ('','$fname','$email','$mobile','$vehicle','$description','no', NOW() )";
+                	$result=@mysqli_query($db,$query);
+                	if ($result) {
+                		@mysqli_free_result($result);
+        				unset($_SESSION['verify_member']);
+        				unset($_SESSION['book']);
+        				$msg="Thank you for booking with us. We will contact you soon.";
+        				$attr="disabled";
+        				$some="disabled";
+        				$mob="disabled";	
+            		}
+        			else{
+        				$msg="We couldn't take your booking due to system error. please try sometime later.";
+        			}
+        			@mysqli_close($db);
+        		}
+            }
+            if (isset($_SESSION['verify_member']) && ($_SESSION['identity']=="customer")) {
+            	$mob="readonly";
+            	$attr="readonly";
+            	$some="";
+            	$check=array("vehicle","description","verify");
+            	foreach ($check as $value) {
+            		if (isset($_SESSION['book'][$value])) {
+            			unset($_SESSION['book'][$value]);
+            		}
+            	}
+            	$input=array("vehicle","description");
+            	$error=array();
+            	foreach ($input as $value) {
+            		$_SESSION['book'][$value]=$_POST[$value];
+            	}
+        		$_SESSION['book']['user-phrase']=sha1($_POST['verify']);
+        		if ($_SESSION['book']['vehicle']=="") {
+            		$error['vehicleErr']="Please select a vehicle type.";
+            	}
+            	if(!preg_match('/^[a-zA-Z0-9!@*+-_.$]+$/', $_SESSION['book']['description'])){
+                	$error['descriptionErr']="Please enter a genuine query!";
+                }
+                if ($_SESSION['book']['user-phrase']!=$_SESSION['pass_phrase']) {
+            		$error['verifyErr']="Please enter the text exactly as shown";
+            	}
+            	else{
+            		$fname=$_SESSION['book']['fname'];
+                	$email=$_SESSION['book']['email'];
+                	$mobile=$_SESSION['book']['mobile']; 
+                	$vehicle=$_SESSION['book']['vehicle'];
+                	$description=$_SESSION['book']['description'];
+                	$query="INSERT INTO bookings (book_id, fname, email, mobile, vehicle, description, registered, regdate) VALUES ('','$fname','$email','$mobile','$vehicle','$description','yes', NOW() )";
+                	$result=@mysqli_query($db,$query);
+                	if ($result) {
+            			
+        				unset($_SESSION['verify_member']);
+        				unset($_SESSION['book']);
+        				$msg="Thank you for booking. we will contact you soon.";
+        				$attr="disabled";
+        				$some="disabled";
+        				$mob="disabled";
+        				
+        			}
+        			else{
+        				$msg="We couldn't take your booking due to system error. please try sometime else.";
+        			}
+        			@mysqli_close($db);
+        		}
+            }
+        	
+            if (!isset($_SESSION['verify_member']) && (!isset($_SESSION['identity']))) {
+            	if (isset($_SESSION['book'])) {
+            		unset($_SESSION['book']);
+            	}
+       
+                $attr="disabled";
+                $some="disabled";	   
+            	$error=array();
+            	$_SESSION['book']['mobile']=$_POST['mobile'];
+            	
             	if ($_SESSION['book']['mobile']=="") {
                 	$error['mobileErr']="Mobile is required";
             	}
@@ -56,7 +176,7 @@
                 }
 
             	if (count($error)>0) {
-            		$msg="Errors !";
+            		$msg="Errors!";
             	}
             
             	else{
@@ -64,26 +184,38 @@
             		$query="SELECT fname,email,mobile FROM customer WHERE (mobile='$mobile')";
             		$result=@mysqli_query($db,$query);
             		if (@mysqli_num_rows($result)==1) {
-            			$_SESSION=@mysqli_fetch_array($result,MYSQLI_ASSOC);
-            			$_SESSION['book']['fname']=$_SESSION['fname'];
-            			$_SESSION['book']['email']=$_SESSION['email'];
-            			$_SESSION['book']['mobile']=$_SESSION['mobile'];
-            			$_SESSION['attr']="readonly";	
-
+            			$_SESSION['book']=@mysqli_fetch_array($result,MYSQLI_ASSOC);
+            			$mob="readonly";
+            			$attr="readonly";
+            			$some="";
+            			$_SESSION['identity']="customer";	
+            			$msg="Hello {$_SESSION['book']['fname']}.Please fill rest of the details.";
             			@mysqli_free_result($result);
             		}
             		else{
-            			$_SESSION['attr']="";
+            			$attr="";
+            			$some="";
+            			$_SESSION['identity']="guest";
+            			$msg="Hello Guest! Please fill in the details.";
             		}
             		$_SESSION['verify_member']="yes";
             	}
             }
-            if (isset($_SESSION['verify_member'])) {
-            	# code...
-            }
+
         }
         else{
-        	$_SESSION['attr']="disabled";
+        	if (isset($_SESSION['book'])) {
+        		unset($_SESSION['book']);
+        	}
+        	if (isset($_SESSION['verify_member'])) {
+        		unset($_SESSION['verify_member']);
+        	}
+        	if(isset($_SESSION['identity'])) {
+        		unset($_SESSION['identity']);
+        	}
+        	$attr="disabled";
+        	$some="disabled";
+        	$msg="First enter your mobile number and click submit";
         }
         
         ?>
@@ -112,7 +244,7 @@
                             </label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" id="mobile" name="mobile" value="<?php echo(@$_SESSION['book']['mobile']); ?>"
-                                placeholder="Enter your Mobile Number(10 digits)">
+                                placeholder="Enter your Mobile Number(10 digits)" <?php echo (@$mob); ?>>
                             </div>
                             <span class="col-sm-4 errorspan" id="mobileerror">
                                 <?php echo(@$error['mobileErr']); ?>
@@ -124,7 +256,7 @@
                             </label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" id="fname" name="fname" value="<?php echo(@$_SESSION['book']['fname']); ?>"
-                                 placeholder="Enter First Name(e.g. Radhika)">
+                                 placeholder="Enter First Name(e.g. Radhika)" <?php echo (@$attr); ?>>
                             </div> 
                             <span class="col-sm-4 errorspan" id="fnameerror">
                                 <?php echo(@$error['fnameErr']); ?>
@@ -136,7 +268,7 @@
                             </label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" id="email" name="email" value="<?php echo(@$_SESSION['book']['email']); ?>" 
-                                placeholder="Enter your valid email-id">
+                                placeholder="Enter your valid email-id" <?php echo (@$attr); ?>>
                             </div>
                             <span class=" col-sm-4 errorspan" id="emailerror">
                                 <?php echo(@$error['emailErr']); ?>
@@ -148,13 +280,13 @@
                             </label>
                             <div class="col-sm-4">
                                 <div class="col-sm-1">
-                                    <input type="radio" name="vehicle" id="two-wheeler" value="two-wheeler">
+                                    <input type="radio" name="vehicle" id="two-wheeler" value="two-wheeler" <?php echo (@$some); ?>>
                                 </div>
                                 <label for="two-wheeler" class="col-sm-1">
                                     Two-Wheeler 
                                 </label>
                                 <div class="col-sm-offset-3 col-sm-1">
-                                    <input type="radio" name="vehicle" id="four-wheeler" value="four-wheeler">
+                                    <input type="radio" name="vehicle" id="four-wheeler" value="four-wheeler" <?php echo (@$some); ?>>
                                 </div>
                                 <label for="four-wheeler" class="col-sm-1">
                                     Four-wheeler 
@@ -171,7 +303,7 @@
                             </label>
                            	<br>
                             <textarea name="description" class="col-sm-offset-4 col-sm-4" rows="5" cols="4"
-                            value="" placeholder="Not more than 50 words....!"></textarea> 
+                            value="<?php echo (@$_SESSION['book']['description']); ?>" placeholder="Not more than 50 words....!" <?php echo (@$some); ?>></textarea> 
                         	<span class="col-sm-2 errorspan" id="fnameerror">
                                 <?php echo(@$error['descriptionErr']); ?>
                             </span>
@@ -182,7 +314,7 @@
                             </label>
                             
                             <div class="col-sm-4">
-                            <input type="text" id="verify" class="form-control" name="verify" placeholder="Enter the text in the image">
+                            <input type="text" id="verify" class="form-control" name="verify" placeholder="Enter the text in the image" <?php echo (@$some); ?>>
                             </div>
                             <img src="captcha.php" alt="verification phrase" class="col-sm-2">
                             <span class="col-sm-2 errorspan" id="verifyerror">

@@ -83,6 +83,8 @@
                 if($result){
                     if (@mysqli_num_rows($result)==1) {
                         $_SESSION=@mysqli_fetch_array($result,MYSQLI_ASSOC);
+                        $_SESSION['index']['fname']=$_SESSION['fname'];
+                        unset($_SESSION['fname']);
                         $_SESSION['log']="yes";
                         unset($_SESSION['login']);
                         mysqli_close($db);
