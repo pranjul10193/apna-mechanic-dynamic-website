@@ -40,6 +40,7 @@
 
         if ($_SERVER['REQUEST_METHOD']=="POST") {
     
+        	$button="Book";
 
         	if (isset($_SESSION['verify_member']) && ($_SESSION['identity']=="guest")) {
         		if(isset($_SESSION['book'])){
@@ -105,6 +106,7 @@
         			else{
         				$msg="We couldn't take your booking due to system error. please try sometime later.";
         			}
+        			
         			@mysqli_close($db);
         		}
             }
@@ -204,6 +206,7 @@
 
         }
         else{
+        	$button="Submit";
         	if (isset($_SESSION['book'])) {
         		unset($_SESSION['book']);
         	}
@@ -324,7 +327,7 @@
                         <div class="form-group">
                             <div class="col-sm-offset-5 col-sm-4">
                                 
-                            <input type="submit" class="btn btn-primary col-sm-offset-2" value="Book" id="submit" name="submit">
+                            <input type="submit" class="btn btn-primary col-sm-offset-2" value="<?php echo($button); ?>" id="submit" name="submit">
                         
                             </div>
                         </div>
