@@ -6,8 +6,7 @@ if (@$_SESSION['log']=="no") {
 }
 else{
 $_SESSION['log']="no";
-unset($_SESSION['index']['fname']);
-unset($_SESSION['cust_id']);
+unset($_SESSION['index']);
 header("Location: index.php");
 }
 ?>

@@ -114,7 +114,7 @@
                 
                 $query="SELECT * FROM customer WHERE (mobile='$mobile' OR email='$email')";
                 $result=@mysqli_query($db,$query);
-                if (@mysqli_num_rows($result)==1) {
+                if (@mysqli_num_rows($result)>=1) {
                     $msg="You have already registered..!";
                     @mysqli_free_result($result);
                     unset($_SESSION['input']);

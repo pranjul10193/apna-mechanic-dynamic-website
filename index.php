@@ -54,7 +54,7 @@
                             $log_value=" Log-Out";
                             $other=" Edit Details";
                             $menu1="logout.php";
-                            $menu2="editDetail.php";
+                            $menu2="editDetails.php";
                         }
                         else{
                             $sign_value=" Sign-In";

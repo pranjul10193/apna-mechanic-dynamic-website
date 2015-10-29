@@ -78,13 +78,11 @@
                 $email=$_SESSION['login']['email'];
                 $password=$_SESSION['login']['password1'];
 
-                $query="SELECT cust_id, fname FROM customer WHERE (email='$email' AND password=sha1('$password'))";
+                $query="SELECT * FROM customer WHERE (email='$email' AND password=sha1('$password'))";
                 $result=@mysqli_query($db,$query); 
                 if($result){
                     if (@mysqli_num_rows($result)==1) {
-                        $_SESSION=@mysqli_fetch_array($result,MYSQLI_ASSOC);
-                        $_SESSION['index']['fname']=$_SESSION['fname'];
-                        unset($_SESSION['fname']);
+                        $_SESSION['index']=@mysqli_fetch_array($result,MYSQLI_ASSOC); 
                         $_SESSION['log']="yes";
                         unset($_SESSION['login']);
                         mysqli_close($db);
