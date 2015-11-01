@@ -55,7 +55,7 @@
 
 	                <?php
 	                	require 'mysqli_connect.php';
-	                	$query="SELECT fname,email,mobile,vehicle,description,registered,DATE_FORMAT(regdate,'%M %d,%Y') AS reg,book_id FROM bookings ORDER BY reg DESC";
+	                	$query="SELECT fname,email,mobile,vehicle,description,registered,DATE_FORMAT(regdate,'%M %d,%Y') AS reg,book_id FROM bookings ORDER BY reg ASC";
 	                	$result=@mysqli_query($db,$query);
 	                	if ($result) {
 	                		echo 
