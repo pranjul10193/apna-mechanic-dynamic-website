@@ -142,14 +142,15 @@
                 <div role="page-info" class="register-head">
                     <h1>Register</h1>
                     <hr>
-                     <p>
-                         hgjhgsdjasgdjagdhjeyrwerw  hwehjgf chghjgdjhfuugu hcsgdfjsd gchjcbhsdfj hgehds hjhhg.
-                     </p>
+                    <p>
+                        hgjhgsdjasgdjagdhjeyrwerw  hwehjgf chghjgdjhfuugu hcsgdfjsd gchjcbhsdfj hgehds hjhhg.
+                    </p>
                 </div>
                 <div class="container">
                     <div class="feedback">
-                        <h2><?php echo @$msg; 
-                                    echo @$errordb;
+                        <h2><?php 
+                                echo @$msg; 
+                                echo @$errordb;
                             ?>
                         </h2>
                     </div>

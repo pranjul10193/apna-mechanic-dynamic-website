@@ -101,7 +101,8 @@
         				$msg="Thank you for booking with us. We will contact you soon.";
         				$attr="disabled";
         				$some="disabled";
-        				$mob="disabled";	
+        				$mob="disabled";
+        				$butt="disabled";	
             		}
         			else{
         				$msg="We couldn't take your booking due to system error. please try sometime later.";
@@ -135,6 +136,9 @@
                 if ($_SESSION['book']['user-phrase']!=$_SESSION['pass_phrase']) {
             		$error['verifyErr']="Please enter the text exactly as shown";
             	}
+            	if (count($error)>0) {
+                  	$msg="Errors!";
+                  }
             	else{
             		$fname=$_SESSION['book']['fname'];
                 	$email=$_SESSION['book']['email'];
@@ -151,6 +155,7 @@
         				$attr="disabled";
         				$some="disabled";
         				$mob="disabled";
+        				$butt="disabled";
         				
         			}
         			else{
@@ -166,7 +171,8 @@
             	}
        
                 $attr="disabled";
-                $some="disabled";	   
+                $some="disabled";
+                $butt="";	   
             	$error=array();
             	$_SESSION['book']['mobile']=$_POST['mobile'];
             	
@@ -203,7 +209,6 @@
             		$_SESSION['verify_member']="yes";
             	}
             }
-
         }
         else{
         	$button="Submit";
@@ -218,6 +223,7 @@
         	}
         	$attr="disabled";
         	$some="disabled";
+        	$butt="";
         	$msg="First enter your mobile number and click submit";
         }
         
@@ -327,7 +333,7 @@
                         <div class="form-group">
                             <div class="col-sm-offset-5 col-sm-4">
                                 
-                            <input type="submit" class="btn btn-primary col-sm-offset-2" value="<?php echo($button); ?>" id="submit" name="submit">
+                            <input type="submit" class="btn btn-primary col-sm-offset-2" value="<?php echo($button); ?>" id="submit" name="submit" <?php echo (@$butt); ?>>
                         
                             </div>
                         </div>

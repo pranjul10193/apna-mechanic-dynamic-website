@@ -8,7 +8,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a href="#mycarousel" class="navbar-brand"><img src="img/logo.png" alt="company" width="120"></a>
+                    <a href="index.php#mycarousel" class="navbar-brand"><img src="img/logo.png" alt="company" width="120"></a>
                 </div>
                 <div id="navbar-collapsed" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
@@ -26,7 +26,11 @@
                             $log_value=" Log-Out";
                             $other=" Edit Details";
                             $menu1="logout.php";
-                            $menu2="editDetail.php";
+                            $menu2="editDetails.php";
+                            if (@$_SESSION['index']['user_level']==1) {
+                                $menu3="adminViewTable.php";
+                                $admin="Admin Page";
+                            }
                         }
                         else{
                             $sign_value=" Sign-In";
@@ -40,6 +44,9 @@
                             echo "<ul role='menu' class='dropdown-menu'>";
                                 echo "<li><a href='$menu1'><span class='icon fa fa-sign-in'></span>".$log_value."</a></li>";
                                 echo "<li><a href='$menu2'><span class='icon fa fa-sign-out'></span>".$other."</a></li>";
+                                if(isset($menu3) && isset($admin)){
+                                    echo "<li><a href='$menu3'><span class='icon fa fa-sign-out'></span>".$admin."</a></li>";
+                                }
                             echo "</ul>";
                         echo"</li>";           
                         ?>

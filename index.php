@@ -56,7 +56,7 @@
                             $menu1="logout.php";
                             $menu2="editDetails.php";
                             if (@$_SESSION['index']['user_level']==1) {
-                                $menu3="Admin.php";
+                                $menu3="adminViewTable.php";
                                 $admin="Admin Page";
                             }
 
@@ -146,14 +146,32 @@
                         <h2>Our Team</h2>
                         <p>hduksjahdkjas askjdhkjasd jksadsakd kjjdhkjsad dhskjdyiuwe jhkgkgsd akjhASKJ UISHua bhjsAKGSUIIYW GHJ
                         JHHGDJGJH HHGDJH JKJSJjhkjhc khdkj jwy jlj ksy oiio huisd qjkhk xiklJX asjkhdk...</p>
-                        <a class="btn btn-primary pull-right" href="#">Meet Team <span class="icon fa fa-arrow-circle-right"></span></a>
+                        <a class="btn btn-primary pull-right" href="#">
+                        <?php 
+                            if (@$_SESSION['index']['user_level']==1) {
+                                echo "Edit Team";
+                            }
+                            else{
+                                echo "Meet Team";
+                            } 
+                        ?>
+                        <span class="icon fa fa-arrow-circle-right"></span></a>
                     </div>
                     <div class="col-sm-4 section">
                         <h2>Recent</h2>
                         <p>sajhdghaj jksd ksjldl LJKlj djLJDLk wiuoeuq jkhkj jashkj JHkhx JKHJKD JHKWJ JDKSAHK KJWHDKJ
                         djkkdhkdsj jh xzjkhkjas jckxz hjsk wi ho ,hashhoi  jsdhh xhjk jkhfksd jkfhskj kjdsfsjd gwqu hgehqj
                         wvjevqwhjev jwqke wqiejq kqlje jqeh...</p>
-                        <a class="btn btn-primary pull-right" href="#">See Whats new <span class="icon fa fa-arrow-circle-right"></span></a>
+                        <a class="btn btn-primary pull-right" href="#">
+                        <?php 
+                            if (@$_SESSION['index']['user_level']==1) {
+                                echo "Update Recent";
+                            }
+                            else{
+                                echo "See Whats New";
+                            } 
+                        ?>    
+                        <span class="icon fa fa-arrow-circle-right"></span></a>
                     </div>
                 </div>
             </div>
